@@ -663,7 +663,7 @@ html,body{
             <span class="mark-icon">🚩</span> Mark for Review
           </button>
         </div>
-        <div class="q-text" id="qText"></div>
+        <div class="q-text" id="qText" style="font-size:18px; color:#000; padding:10px;">Loading question...</div>
         <div class="choices" id="choicesEl"></div>
       </div>
 
@@ -800,7 +800,7 @@ function shfl(a){
 }
 
 function initQ(){
-  order = shfl([...Array(QS.length).keys()]);
+  order=shfl([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
   shuf=[];
   for(var i=0;i<QS.length;i++){
     var q=QS[i];
