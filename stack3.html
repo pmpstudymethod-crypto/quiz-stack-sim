@@ -1229,6 +1229,21 @@ function downloadCert(){
     '</body></html>';
   w.document.write(html);
   w.document.close();
+document.addEventListener('DOMContentLoaded', function () {
+  cur = 0;
+  score = 0;
+  secs = T_START;
+  tOn = false;
+  answered = false;
+  streak = 0;
+  bestStreak = 0;
+  marked.clear();
+
+  initQ();
+  startTime = Date.now();
+  if (!study) startTimer();
+  loadQ();
+});
 }
 </script>
 </body>
