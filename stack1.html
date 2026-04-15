@@ -606,7 +606,7 @@ html,body{
   </div>
 </div>
 
-<div class="app" id="app" style="display:flex;">
+<div class="app" id="app" style="display:none;">
 
   <div class="study-banner" id="studyBanner">📖 Study Mode Active — Timer Paused · No Pressure</div>
 
@@ -1275,26 +1275,6 @@ function downloadCert(){
   w.document.write(html);
   w.document.close();
 }
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  var g = document.getElementById('gate');
-  if (g) g.style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
-  cur = 0;
-  score = 0;
-  secs = T_START;
-  tOn = false;
-  answered = false;
-  streak = 0;
-  bestStreak = 0;
-  marked.clear();
-  initQ();
-  startTime = Date.now();
-  if (!study) startTimer();
-  loadQ();
-});
-
 </script>
 </body>
 </html>
