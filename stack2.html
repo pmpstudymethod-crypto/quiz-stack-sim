@@ -663,7 +663,7 @@ html,body{
             <span class="mark-icon">🚩</span> Mark for Review
           </button>
         </div>
-        <div class="q-text" id="qText" style="font-size:18px; color:#000; padding:10px;">Loading question...</div>
+        <div class="q-text" id="qText"></div>
         <div class="choices" id="choicesEl"></div>
       </div>
 
@@ -1229,6 +1229,8 @@ function downloadCert(){
     '</body></html>';
   w.document.write(html);
   w.document.close();
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   cur = 0;
   score = 0;
