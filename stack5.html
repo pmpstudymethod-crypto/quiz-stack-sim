@@ -1230,35 +1230,6 @@ function downloadCert(){
   w.document.write(html);
   w.document.close();
 }
-
-document.addEventListener('DOMContentLoaded', function () {
-  try {
-    cur=0;score=0;secs=T_START;tOn=false;answered=false;
-    streak=0;bestStreak=0;marked.clear();
-    ['People','Process','Business Environment'].forEach(function(d){ds[d]={c:0,t:0};});
-
-    var rs=document.getElementById('resultsScreen');
-    if(rs) rs.classList.remove('on');
-
-    ['quizDiv','progRow','timerBar'].forEach(function(id){
-      var e=document.getElementById(id);
-      if(e) e.style.display='';
-    });
-
-    var gb=document.querySelector('.game-bar');
-    if(gb) gb.style.display='';
-
-    initQ();
-    startTime=Date.now();
-    if(!study) startTimer();
-    loadQ();
-    window.scrollTo({top:0,behavior:'auto'});
-  } catch(e) {
-    console.log('Startup error:', e);
-  }
-});
-
-
 </script>
 </body>
 </html>
