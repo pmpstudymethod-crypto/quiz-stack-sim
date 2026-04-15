@@ -1,184 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stack 1 | PMP Study Method</title>
+</head>
+
+<body>
+
+<div id="app" style="display:flex; flex-direction:column; max-width:700px; margin:auto;">
+
+<h2>Stack 1</h2>
+
+<div id="qText"></div>
+<div id="choicesEl"></div>
+
+<button onclick="nextQ()">Next</button>
+
+</div>
+
 <script>
 
-const T_START = 900;
-
-let cur = 0;
-let score = 0;
-let secs = T_START;
-let tOn = false;
-let answered = false;
-let study = false;
-let streak = 0;
-let bestStreak = 0;
-let marked = new Set();
-let startTime = null;
-
-let order = [];
-let timerInt = null;
-
-/* =========================
-   SHUFFLE
-========================= */
-function shfl(a){
-  for(let i=a.length-1;i>0;i--){
-    const j=Math.floor(Math.random()*(i+1));
-    [a[i],a[j]]=[a[j],a[i]];
+// ✅ KEEP YOUR REAL QUESTIONS
+var QS = typeof QS !== "undefined" ? QS : [
+  {
+    q: "Replace with your real Stack 1 question",
+    c: ["A","B","C","D"],
+    a: 0
   }
-  return a;
+];
+
+// ================= VARIABLES =================
+var cur = 0;
+var score = 0;
+var order = [];
+
+// ================= SHUFFLE =================
+function shfl(arr){
+  return arr.sort(() => Math.random() - 0.5);
 }
 
-/* =========================
-   INIT QUESTIONS
-========================= */
+// ================= INIT =================
 function initQ(){
   order = shfl([...Array(QS.length).keys()]);
 }
 
-/* =========================
-   LOAD QUESTION
-========================= */
+// ================= LOAD =================
 function loadQ(){
-  const q = QS[order[cur]];
-  if(!q) return;
+  var qi = order[cur];
+  var q = QS[qi];
 
-  document.getElementById("qText").innerText = q.q;
+  document.getElementById('qText').textContent = q.q;
 
-  const choices = document.getElementById("choices");
-  choices.innerHTML = "";
+  var el = document.getElementById('choicesEl');
+  el.innerHTML = '';
 
-  q.c.forEach((choice,i)=>{
-    const btn = document.createElement("button");
-    btn.className = "choice";
-    btn.innerHTML = `<span class="choice-letter">${String.fromCharCode(65+i)}</span> ${choice}`;
-    btn.onclick = ()=>select(i);
-    choices.appendChild(btn);
+  q.c.forEach((choice, i) => {
+    var btn = document.createElement('button');
+    btn.textContent = choice;
+    btn.onclick = () => checkAnswer(i, q.a);
+    el.appendChild(btn);
   });
-
-  document.getElementById("counter").innerHTML =
-    `<strong>${cur+1}</strong> / ${QS.length}`;
 }
 
-/* =========================
-   SELECT ANSWER
-========================= */
-function select(i){
-  if(answered) return;
-
-  answered = true;
-
-  const q = QS[order[cur]];
-  const choices = document.querySelectorAll(".choice");
-
-  choices.forEach((c,idx)=>{
-    if(idx === q.a){
-      c.classList.add("cor");
-    } else if(idx === i){
-      c.classList.add("wrg");
-    } else {
-      c.classList.add("dim");
-    }
-  });
-
-  if(i === q.a){
+// ================= CHECK =================
+function checkAnswer(i, correct){
+  if(i === correct){
     score++;
-    streak++;
-    bestStreak = Math.max(bestStreak,streak);
+    alert("Correct");
   } else {
-    streak = 0;
+    alert("Wrong");
   }
-
-  document.getElementById("nextBtn").classList.add("on");
 }
 
-/* =========================
-   NEXT
-========================= */
+// ================= NEXT =================
 function nextQ(){
   cur++;
-  answered = false;
-
   if(cur >= QS.length){
-    finish();
+    alert("Done. Score: " + score);
     return;
   }
-
   loadQ();
-  document.getElementById("nextBtn").classList.remove("on");
 }
 
-/* =========================
-   TIMER
-========================= */
-function startTimer(){
-  if(timerInt) return;
-
-  timerInt = setInterval(()=>{
-    secs--;
-
-    document.getElementById("timer").innerText = secs;
-
-    if(secs <= 0){
-      clearInterval(timerInt);
-      finish();
-    }
-  },1000);
-}
-
-/* =========================
-   FINISH
-========================= */
-function finish(){
-  clearInterval(timerInt);
-
-  document.getElementById("app").style.display = "none";
-  document.getElementById("results").classList.add("on");
-
-  const pct = Math.round((score / QS.length) * 100);
-
-  document.getElementById("finalScore").innerText = pct + "%";
-}
-
-/* =========================
-   GATE
-========================= */
-function unlock(){
-  localStorage.setItem("sr_access","granted");
-
-  document.getElementById("gate").style.display = "none";
-
+// ================= START =================
+document.addEventListener('DOMContentLoaded', function () {
   initQ();
   loadQ();
-  startTimer();
-}
-
-/* =========================
-   STARTUP (CRITICAL FIX)
-========================= */
-document.addEventListener('DOMContentLoaded', function () {
-
-  try {
-
-    cur = 0;
-    score = 0;
-    secs = T_START;
-    tOn = false;
-    answered = false;
-    streak = 0;
-    bestStreak = 0;
-    marked.clear();
-
-    initQ();
-
-    if (localStorage.getItem('sr_access') === 'granted') {
-      document.getElementById("gate").style.display = "none";
-      loadQ();
-      startTimer();
-    }
-
-  } catch(e) {
-    console.log("Startup error:", e);
-  }
-
 });
 
 </script>
+
+</body>
+</html>
