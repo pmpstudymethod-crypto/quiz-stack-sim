@@ -1,6 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exam Simulation | PMP Study Method</title>
+</head>
+
+<body>
+
+<!-- START SCREEN -->
+<div id="startScreen" style="text-align:center; margin-top:100px;">
+
+  <h2>Full Exam Simulation</h2>
+
+  <!-- ✅ BUTTON FIX INCLUDED -->
+  <button class="start-btn" onclick="beginExam()">
+    Begin Exam Simulation →
+  </button>
+
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none; max-width:700px; margin:auto;">
+
+  <div id="timer" style="font-size:24px;">2400</div>
+
+  <div id="qText"></div>
+  <div id="choices"></div>
+
+  <button id="nextBtn" onclick="nextQ()">Next</button>
+
+</div>
+
+<!-- RESULTS -->
+<div id="results" style="display:none; text-align:center;">
+  <h2>Score: <span id="finalScore"></span></h2>
+</div>
+
 <script>
 
-const T_START = 2400; // 40 min exam
+const T_START = 2400;
 
 let cur = 0;
 let score = 0;
@@ -8,7 +47,6 @@ let secs = T_START;
 let answered = false;
 let order = [];
 let timerInt = null;
-let startTime = null;
 
 /* =========================
    SHUFFLE
@@ -22,7 +60,7 @@ function shfl(a){
 }
 
 /* =========================
-   INIT QUESTIONS
+   INIT
 ========================= */
 function initQ(){
   order = shfl([...Array(QS.length).keys()]);
@@ -43,48 +81,35 @@ function loadQ(){
 
   q.c.forEach((choice,i)=>{
     const btn = document.createElement("button");
-    btn.className = "choice";
-    btn.innerHTML = `<span class="choice-letter">${String.fromCharCode(65+i)}</span> ${choice}`;
+    btn.innerHTML = `<b>${String.fromCharCode(65+i)}.</b> ${choice}`;
     btn.onclick = ()=>select(i);
     choices.appendChild(btn);
   });
 
-  document.getElementById("counter").innerHTML =
-    `<strong>${cur+1}</strong> / ${QS.length}`;
 }
 
 /* =========================
-   SELECT ANSWER
+   SELECT
 ========================= */
 function select(i){
+
   if(answered) return;
 
   answered = true;
 
   const q = QS[order[cur]];
-  const choices = document.querySelectorAll(".choice");
-
-  choices.forEach((c,idx)=>{
-    if(idx === q.a){
-      c.classList.add("cor");
-    } else if(idx === i){
-      c.classList.add("wrg");
-    } else {
-      c.classList.add("dim");
-    }
-  });
 
   if(i === q.a){
     score++;
   }
 
-  document.getElementById("nextBtn").classList.add("on");
 }
 
 /* =========================
-   NEXT QUESTION
+   NEXT
 ========================= */
 function nextQ(){
+
   cur++;
   answered = false;
 
@@ -94,7 +119,6 @@ function nextQ(){
   }
 
   loadQ();
-  document.getElementById("nextBtn").classList.remove("on");
 }
 
 /* =========================
@@ -118,11 +142,12 @@ function startTimer(){
 }
 
 /* =========================
-   START EXAM (CRITICAL)
+   START EXAM
 ========================= */
 function beginExam(){
 
   document.getElementById("startScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
 
   cur = 0;
   score = 0;
@@ -142,7 +167,7 @@ function finish(){
   clearInterval(timerInt);
 
   document.getElementById("app").style.display = "none";
-  document.getElementById("results").classList.add("on");
+  document.getElementById("results").style.display = "block";
 
   const pct = Math.round((score / QS.length) * 100);
 
@@ -150,3 +175,6 @@ function finish(){
 }
 
 </script>
+
+</body>
+</html>
