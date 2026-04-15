@@ -4,104 +4,159 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stack 1 | PMP Study Method</title>
-</head>
 
+<style>
+body { font-family: Arial; background:#f5f6f8; margin:0; }
+.container { max-width:800px; margin:auto; padding:20px; }
+.card { background:#fff; padding:20px; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+button { margin-top:10px; padding:10px; border-radius:6px; border:none; cursor:pointer; }
+.choice { display:block; width:100%; text-align:left; background:#eee; margin:5px 0; }
+.correct { background:#3FAE4D; color:#fff; }
+.wrong { background:#E74C3C; color:#fff; }
+.start-btn { background:#F7941D; color:#fff; font-weight:bold; width:100%; }
+</style>
+
+</head>
 <body>
 
-<div id="app" style="display:flex; flex-direction:column; max-width:700px; margin:auto;">
+<div class="container">
 
+<div class="card" id="quizBox">
 <h2>Stack 1</h2>
+
+<div id="timer">Time: 20:00</div>
+<br>
 
 <div id="qText"></div>
 <div id="choicesEl"></div>
 
 <button onclick="nextQ()">Next</button>
+</div>
+
+<div class="card" id="resultBox" style="display:none;">
+<h2>Stack 1 Complete!</h2>
+<p id="scoreText"></p>
+<p id="passText"></p>
+
+<button onclick="restart()">Retake</button>
+</div>
 
 </div>
 
 <script>
 
-// ✅ REAL QUESTIONS (REPLACE WITH YOUR FULL SET IF NEEDED)
+// ===== QUESTIONS (REPLACE WITH YOUR FULL SET) =====
 var QS = [
   {
-    q: "A project manager is assigned to a new project with unclear requirements. What should they do first?",
-    c: [
-      "Begin execution immediately",
-      "Identify stakeholders and gather requirements",
-      "Create a budget",
-      "Assign team members"
-    ],
+    q: "A project manager is assigned to a project with unclear requirements. What should they do first?",
+    c: ["Start execution", "Identify stakeholders", "Create budget", "Assign team"],
     a: 1
   },
   {
-    q: "A stakeholder requests a major change during execution. What should the project manager do?",
-    c: [
-      "Approve it immediately",
-      "Reject the request",
-      "Follow the change control process",
-      "Ignore the request"
-    ],
+    q: "A change request is submitted during execution. What should the PM do?",
+    c: ["Approve immediately", "Ignore", "Follow change control", "Reject"],
     a: 2
   }
 ];
 
-// ================= VARIABLES =================
+// ===== VARIABLES =====
 var cur = 0;
 var score = 0;
 var order = [];
+var totalTime = 1200;
+var timeLeft = totalTime;
+var timerInt;
 
-// ================= SHUFFLE =================
+// ===== SHUFFLE =====
 function shfl(arr){
   return arr.sort(() => Math.random() - 0.5);
 }
 
-// ================= INIT =================
+// ===== INIT =====
 function initQ(){
   order = shfl([...Array(QS.length).keys()]);
 }
 
-// ================= LOAD =================
+// ===== LOAD QUESTION =====
 function loadQ(){
   var qi = order[cur];
   var q = QS[qi];
 
-  document.getElementById('qText').textContent = q.q;
+  document.getElementById('qText').innerText = "Q " + (cur+1) + " of " + QS.length + ": " + q.q;
 
   var el = document.getElementById('choicesEl');
   el.innerHTML = '';
 
   q.c.forEach((choice, i) => {
     var btn = document.createElement('button');
-    btn.textContent = choice;
-    btn.onclick = () => checkAnswer(i, q.a);
+    btn.className = "choice";
+    btn.innerText = choice;
+
+    btn.onclick = function(){
+      if(i === q.a){
+        btn.classList.add("correct");
+        score++;
+      } else {
+        btn.classList.add("wrong");
+      }
+    };
+
     el.appendChild(btn);
   });
 }
 
-// ================= CHECK =================
-function checkAnswer(i, correct){
-  if(i === correct){
-    score++;
-    alert("Correct");
-  } else {
-    alert("Wrong");
-  }
-}
-
-// ================= NEXT =================
+// ===== NEXT =====
 function nextQ(){
   cur++;
   if(cur >= QS.length){
-    alert("Done. Score: " + score);
+    finish();
     return;
   }
   loadQ();
 }
 
-// ✅ AUTO START (THIS FIXES YOUR ISSUE)
-document.addEventListener('DOMContentLoaded', function () {
+// ===== TIMER =====
+function startTimer(){
+  timerInt = setInterval(function(){
+    timeLeft--;
+    var min = Math.floor(timeLeft / 60);
+    var sec = timeLeft % 60;
+    document.getElementById('timer').innerText = "Time: " + min + ":" + (sec<10?"0":"") + sec;
+
+    if(timeLeft <= 0){
+      finish();
+    }
+  },1000);
+}
+
+// ===== FINISH =====
+function finish(){
+  clearInterval(timerInt);
+
+  document.getElementById('quizBox').style.display = "none";
+  document.getElementById('resultBox').style.display = "block";
+
+  var percent = Math.round((score / QS.length) * 100);
+
+  document.getElementById('scoreText').innerText = "Score: " + percent + "%";
+
+  if(percent >= 71){
+    document.getElementById('passText').innerText = "PASS — You are ready for the next stack.";
+  } else {
+    document.getElementById('passText').innerText = "Not yet — Retake and improve your score.";
+  }
+}
+
+// ===== RESTART =====
+function restart(){
+  location.reload();
+}
+
+// ===== START =====
+document.addEventListener('DOMContentLoaded', function(){
   initQ();
   loadQ();
+  startTimer();
 });
 
 </script>
