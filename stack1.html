@@ -800,7 +800,7 @@ function shfl(a){
 }
 
 function initQ(){
-  order = shfl([...Array(QS.length).keys()]);
+  order=shfl([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]);
   shuf=[];
   for(var i=0;i<QS.length;i++){
     var q=QS[i];
@@ -828,35 +828,6 @@ function initQ(){
 
 
 
-function doGate(event){
-  if(event)event.preventDefault();
-  var fn=document.getElementById('gFirst').value.trim();
-  var em=document.getElementById('gEmail').value.trim();
-  if(!fn||!em){alert('Please enter your first name and email address.');return;}
-  user={firstName:fn,email:em,stack:STACK};
-  document.getElementById('gate').style.display='none';
-  document.getElementById('app').style.display='flex';
-  initQ();
-  startTime=Date.now();
-  if(!study)startTimer();
-  loadQ();
-}
-
-// Auto-unlock for paid members
-(function(){
-  var p=new URLSearchParams(location.search);
-  if(p.get('access')==='granted'||localStorage.getItem('sr_access')==='1'){
-    var fn=p.get('name')||localStorage.getItem('sr_name')||'Member';
-    var em=p.get('email')||localStorage.getItem('sr_email')||'';
-    if(p.get('name'))localStorage.setItem('sr_name',fn);
-    if(p.get('email'))localStorage.setItem('sr_email',em);
-    localStorage.setItem('sr_access','1');
-    user={firstName:fn,email:em,stack:STACK};
-    var g=document.getElementById("gate");if(g)g.style.display="none";
-    document.getElementById('app').style.display='flex';
-    initQ();startTime=Date.now();if(!study)startTimer();loadQ();
-  }
-})();
 
 function toggleMode(){
   study=!study;
@@ -1259,24 +1230,6 @@ function downloadCert(){
   w.document.write(html);
   w.document.close();
 }
-
-
-document.addEventListener('DOMContentLoaded', function () {
-  document.getElementById('app').style.display = 'flex';
-  cur = 0;
-  score = 0;
-  secs = T_START;
-  tOn = false;
-  answered = false;
-  streak = 0;
-  bestStreak = 0;
-  marked.clear();
-  initQ();
-  startTime = Date.now();
-  if (!study) startTimer();
-  loadQ();
-});
-
 </script>
 </body>
 </html>
