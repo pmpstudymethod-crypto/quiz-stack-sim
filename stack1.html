@@ -1,166 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Stack 1 | PMP Study Method</title>
+<div class="results-screen" id="resultsScreen">
+  <div class="res-top">
+    <div class="res-badge">🎉 Stack Completed</div>
+    <div class="res-title">Stack 1 <em>Complete!</em></div>
 
-<!-- KEEP YOUR ORIGINAL STYLE (PASTE YOUR FULL STYLE BLOCK ABOVE THIS IF NEEDED) -->
+    <div class="score-ring-wrap">
+      <svg class="score-ring-svg" width="160" height="160" viewBox="0 0 160 160">
+        <circle class="score-ring-bg" cx="80" cy="80" r="65"/>
+        <circle class="score-ring-fill" id="ringFill" cx="80" cy="80" r="65"/>
+      </svg>
+      <div class="score-ring-center">
+        <div class="score-percent" id="resPct">0%</div>
+        <div class="score-fraction" id="resFrac">0 / 15</div>
+      </div>
+    </div>
 
-</head>
-<body>
+    <div class="score-msg" id="scoreMsg">Keep going — every question builds your PMP decision-making skills.</div>
+  </div>
 
-<!-- KEEP YOUR ORIGINAL APP STRUCTURE -->
-<div id="app" class="app" style="display:flex;">
-
-  <!-- HEADER / TIMER / UI stays exactly as your file -->
-
-  <div class="card-zone">
-    <div class="q-card">
-
-      <div id="qText"></div>
-      <div id="choicesEl"></div>
-
+  <div class="domain-grid" id="domainGrid">
+    <div class="dom-card">
+      <div class="dom-name">👥 People</div>
+      <div class="dom-score" id="domPeople">0 / 0</div>
+    </div>
+    <div class="dom-card">
+      <div class="dom-name">⚙️ Process</div>
+      <div class="dom-score" id="domProcess">0 / 0</div>
+    </div>
+    <div class="dom-card">
+      <div class="dom-name">🌐 Business Environment</div>
+      <div class="dom-score" id="domBiz">0 / 0</div>
     </div>
   </div>
 
-  <div class="action-bar">
-    <button class="next-btn" id="nextBtn" onclick="nextQ()">Next →</button>
+  <div class="next-stack-cta" id="nextStackCta">
+    <div class="nsc-title">Stack 1 Complete!</div>
+    <div class="nsc-sub">Ready for Stack 2? Strong start. Keep the momentum going — one stack at a time builds real PMP confidence.</div>
+    <a id="nextStackBtn" href="stack2.html" class="nsc-btn" type="button">Continue to Stack 2 →</a>
   </div>
 
+  <div class="cert-wrap" id="certDiv">
+    <span class="cert-corner tl">🏆</span>
+    <span class="cert-corner tr">⭐</span>
+    <span class="cert-corner bl">⭐</span>
+    <span class="cert-corner br">🏆</span>
+
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAABkCAYAAAA8AQ3AAAAACXBIWXMAAAsSAAALEgHS3X78AA..." class="cert-logo" alt="PMP Study Method">
+
+    <div class="cert-kicker">Certificate of Completion</div>
+    <div class="cert-title">Stack 1 of 20</div>
+    <div class="cert-sub">ECO 2026 · PMBOK 8 Aligned · PMP Exam Preparation</div>
+    <div class="cert-divider"></div>
+    <div style="font-size:12px;color:var(--sub);margin-bottom:4px;">This certifies that</div>
+    <div class="cert-name" id="certName">PMP Candidate</div>
+    <div style="font-size:12px;color:var(--sub);margin:8px 0 4px;">has successfully completed</div>
+    <div class="cert-stack">Stack 1 of 20 · 15 Exam-Quality Questions</div>
+    <div class="cert-score" id="certScore">0 / 15 — 0%</div>
+    <div class="cert-date" id="certDate">Completed: —</div>
+
+    <div class="cert-actions">
+      <button class="cert-btn" type="button" id="certDlBtn" onclick="downloadCert()">⬇ Download Certificate</button>
+      <button class="retake-btn" type="button" onclick="doRetake()">🔁 Retake Stack 1</button>
+    </div>
+
+    <div class="bfoot">
+      Score <strong>71% or higher</strong> to unlock the next Stack and earn your certificate.
+    </div>
+  </div>
 </div>
-
-<script>
-
-// ============================
-// 🔴 USE YOUR REAL QUESTIONS
-// ============================
-
-var QS = typeof QS !== "undefined" ? QS : [
-  {
-    q: "Replace with your real Stack 1 questions",
-    c: ["A","B","C","D"],
-    a: 0
-  }
-];
-
-// ============================
-// VARIABLES
-// ============================
-
-var cur = 0;
-var score = 0;
-var order = [];
-var answered = false;
-
-// ============================
-// SHUFFLE
-// ============================
-
-function shfl(arr){
-  return arr.sort(() => Math.random() - 0.5);
-}
-
-// ============================
-// INIT
-// ============================
-
-function initQ(){
-  order = shfl([...Array(QS.length).keys()]);
-}
-
-// ============================
-// LOAD QUESTION (REAL FIX)
-// ============================
-
-function loadQ(){
-  var qi = order[cur];
-  var q = QS[qi];
-
-  answered = false;
-
-  document.getElementById('qText').innerText = "Q " + (cur+1) + " of " + QS.length + ": " + q.q;
-
-  var el = document.getElementById('choicesEl');
-  el.innerHTML = '';
-
-  q.c.forEach((choice, i) => {
-    var btn = document.createElement('button');
-    btn.className = "choice";
-    btn.innerText = choice;
-
-    btn.onclick = function(){
-
-      if(answered) return;
-      answered = true;
-
-      if(i === q.a){
-        btn.classList.add("cor");
-        score++;
-      } else {
-        btn.classList.add("wrg");
-      }
-
-      document.getElementById('nextBtn').classList.add("on");
-    };
-
-    el.appendChild(btn);
-  });
-
-  document.getElementById('nextBtn').classList.remove("on");
-}
-
-// ============================
-// NEXT
-// ============================
-
-function nextQ(){
-  cur++;
-
-  if(cur >= QS.length){
-    finish();
-    return;
-  }
-
-  loadQ();
-}
-
-// ============================
-// FINISH
-// ============================
-
-function finish(){
-  alert("Score: " + Math.round((score/QS.length)*100) + "%");
-}
-
-// ============================
-// 🔥 CRITICAL FIX (YOUR ISSUE)
-// ============================
-
-document.addEventListener('DOMContentLoaded', function(){
-
-  // REMOVE GATE VISUALLY (WITHOUT DELETING IT)
-  var gate = document.querySelector('.gate');
-  if(gate) gate.style.display = "none";
-
-  var upsell = document.querySelector('.upsell');
-  if(upsell) upsell.style.display = "none";
-
-  // FORCE APP VISIBLE
-  var app = document.getElementById('app');
-  if(app) app.style.display = "flex";
-
-  // RESET STATE
-  cur = 0;
-  score = 0;
-
-  // LOAD QUESTIONS
-  initQ();
-  loadQ();
-
-});
-
-</script>
-
-</body>
-</html>
