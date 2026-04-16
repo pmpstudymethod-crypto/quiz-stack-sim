@@ -399,7 +399,7 @@ html,body{
 }
 .results.on{display:flex;}
 .res-shield{width:64px;height:auto;margin-bottom:-8px;}
-.res-logo{width:190px;height:auto;}
+.res-logo{display:none;width:190px;height:auto;}
 .res-title{font-size:28px;font-weight:900;color:var(--txt);line-height:1.2;}
 .res-title em{color:var(--or);font-style:normal;}
 
@@ -520,7 +520,7 @@ html,body{
 .cert-corner.tr{top:12px;right:16px;}
 .cert-corner.bl{bottom:12px;left:16px;}
 .cert-corner.br{bottom:12px;right:16px;}
-.cert-logo{width:160px;height:auto;margin:0 auto 6px;display:block;}
+.cert-logo{display:none;width:160px;height:auto;margin:0 auto 6px;}
 .cert-shield{width:50px;height:auto;margin:0 auto 10px;display:block;}
 .cert-seal{font-size:42px;margin-bottom:8px;}
 .cert-org{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--sub);margin-bottom:4px;}
@@ -1088,14 +1088,14 @@ function endQuiz(){
   (function(){
     var nb=document.getElementById('nextStackBtn');
     var cb=document.getElementById('certDlBtn');
-    var nextCta=nb?nb.closest('.next-stack-cta'):null;
-    var certDiv=document.getElementById('certDiv');
-    if(nextCta)nextCta.style.display='';
-    if(certDiv)certDiv.style.display='';
-    if(cb){cb.disabled=false;cb.onclick=downloadCert;cb.style.cssText='';cb.textContent='⬇ Download PDF Certificate';}
+    var nextWrap=nb && nb.closest ? nb.closest('.next-stack-cta') : null;
+    var certWrap=cb && cb.closest ? cb.closest('.cert-wrap') : null;
     if(pct<71){
-      if(nextCta)nextCta.style.display='none';
-      if(certDiv)certDiv.style.display='none';
+      if(nextWrap) nextWrap.style.display='none';
+      if(certWrap) certWrap.style.display='none';
+    } else {
+      if(nextWrap) nextWrap.style.display='';
+      if(certWrap) certWrap.style.display='';
     }
   })();
 }
@@ -1104,13 +1104,6 @@ function doRetake(){
   cur=0;score=0;secs=T_START;tOn=false;answered=false;
   streak=0;bestStreak=0;marked.clear();
   ['People','Process','Business Environment'].forEach(function(d){ds[d]={c:0,t:0};});
-  var nb=document.getElementById('nextStackBtn');
-  var nextCta=nb?nb.closest('.next-stack-cta'):null;
-  var certDiv=document.getElementById('certDiv');
-  var cb=document.getElementById('certDlBtn');
-  if(nextCta)nextCta.style.display='';
-  if(certDiv)certDiv.style.display='';
-  if(cb){cb.disabled=false;cb.onclick=downloadCert;cb.style.cssText='';cb.textContent='⬇ Download PDF Certificate';}
   document.getElementById('resultsScreen').classList.remove('on');
   ['quizDiv','progRow','timerBar'].forEach(function(id){
     var e=document.getElementById(id);if(e)e.style.display='';
@@ -1289,6 +1282,13 @@ function downloadCert(){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  if (window.__stackBooted) return;
+  window.__stackBooted = true;
+  var g = document.getElementById('gate');
+  if (g) g.style.display = 'none';
+  var app = document.getElementById('app');
+  if (app) app.style.display = 'flex';
+
   cur = 0;
   score = 0;
   secs = T_START;
@@ -1307,6 +1307,7 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!study) startTimer();
   loadQ();
 });
+
 </script>
 </body>
 </html>
