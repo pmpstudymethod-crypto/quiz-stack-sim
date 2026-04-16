@@ -816,7 +816,7 @@ function shfl(a){
 }
 
 function initQ(){
-  order = shfl([...Array(QS.length).keys()]);
+  order=shfl([...Array(QS.length).keys()]);
   shuf=[];
   for(var i=0;i<QS.length;i++){
     var q=QS[i];
@@ -850,6 +850,7 @@ function doGate(event){
   var em=document.getElementById('gEmail').value.trim();
   if(!fn||!em){alert('Please enter your first name and email address.');return;}
   user={firstName:fn,email:em,stack:STACK};
+  window.__stackBooted=true;
   document.getElementById('gate').style.display='none';
   document.getElementById('app').style.display='flex';
   initQ();
@@ -868,6 +869,7 @@ function doGate(event){
     if(p.get('email'))localStorage.setItem('sr_email',em);
     localStorage.setItem('sr_access','1');
     user={firstName:fn,email:em,stack:STACK};
+    window.__stackBooted=true;
     var g=document.getElementById("gate");if(g)g.style.display="none";
     document.getElementById('app').style.display='flex';
     initQ();startTime=Date.now();if(!study)startTimer();loadQ();
@@ -1276,11 +1278,14 @@ function downloadCert(){
   w.document.close();
 }
 
-
 document.addEventListener('DOMContentLoaded', function () {
+  if (window.__stackBooted) return;
+  window.__stackBooted = true;
   var g = document.getElementById('gate');
   if (g) g.style.display = 'none';
-  document.getElementById('app').style.display = 'flex';
+  var app = document.getElementById('app');
+  if (app) app.style.display = 'flex';
+
   cur = 0;
   score = 0;
   secs = T_START;
@@ -1289,6 +1294,11 @@ document.addEventListener('DOMContentLoaded', function () {
   streak = 0;
   bestStreak = 0;
   marked.clear();
+
+  ['People','Process','Business Environment'].forEach(function(d){
+    ds[d]={c:0,t:0};
+  });
+
   initQ();
   startTime = Date.now();
   if (!study) startTimer();
