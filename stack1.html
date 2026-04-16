@@ -1088,9 +1088,14 @@ function endQuiz(){
   (function(){
     var nb=document.getElementById('nextStackBtn');
     var cb=document.getElementById('certDlBtn');
+    var nextCta=nb?nb.closest('.next-stack-cta'):null;
+    var certDiv=document.getElementById('certDiv');
+    if(nextCta)nextCta.style.display='';
+    if(certDiv)certDiv.style.display='';
+    if(cb){cb.disabled=false;cb.onclick=downloadCert;cb.style.cssText='';cb.textContent='⬇ Download PDF Certificate';}
     if(pct<71){
-      if(nb){nb.removeAttribute('href');nb.style.cssText='background:#94A3B8!important;cursor:not-allowed!important;box-shadow:none!important;opacity:.65;pointer-events:none;';nb.textContent='\uD83D\uDD12 Score 71%+ to Unlock the Next Stack';}
-      if(cb){cb.disabled=true;cb.onclick=null;cb.style.cssText='background:#94A3B8!important;cursor:not-allowed!important;box-shadow:none!important;opacity:.65;';cb.textContent='\uD83D\uDD12 Score 71%+ to Earn Your Certificate';}
+      if(nextCta)nextCta.style.display='none';
+      if(certDiv)certDiv.style.display='none';
     }
   })();
 }
@@ -1099,6 +1104,13 @@ function doRetake(){
   cur=0;score=0;secs=T_START;tOn=false;answered=false;
   streak=0;bestStreak=0;marked.clear();
   ['People','Process','Business Environment'].forEach(function(d){ds[d]={c:0,t:0};});
+  var nb=document.getElementById('nextStackBtn');
+  var nextCta=nb?nb.closest('.next-stack-cta'):null;
+  var certDiv=document.getElementById('certDiv');
+  var cb=document.getElementById('certDlBtn');
+  if(nextCta)nextCta.style.display='';
+  if(certDiv)certDiv.style.display='';
+  if(cb){cb.disabled=false;cb.onclick=downloadCert;cb.style.cssText='';cb.textContent='⬇ Download PDF Certificate';}
   document.getElementById('resultsScreen').classList.remove('on');
   ['quizDiv','progRow','timerBar'].forEach(function(id){
     var e=document.getElementById(id);if(e)e.style.display='';
@@ -1277,13 +1289,6 @@ function downloadCert(){
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-  if (window.__stackBooted) return;
-  window.__stackBooted = true;
-  var g = document.getElementById('gate');
-  if (g) g.style.display = 'none';
-  var app = document.getElementById('app');
-  if (app) app.style.display = 'flex';
-
   cur = 0;
   score = 0;
   secs = T_START;
@@ -1302,7 +1307,6 @@ document.addEventListener('DOMContentLoaded', function () {
   if (!study) startTimer();
   loadQ();
 });
-
 </script>
 </body>
 </html>
