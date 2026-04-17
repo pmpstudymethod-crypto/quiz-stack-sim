@@ -587,6 +587,54 @@ html,body{
   .app{max-width:800px;}
 }
 </style>
+
+<style>
+@media print{
+  .certificate-overlay,
+  .cert-overlay,
+  .certificate-modal,
+  .cert-modal,
+  .print-overlay{
+    position:static !important;
+    inset:auto !important;
+    background:transparent !important;
+    padding:0 !important;
+    margin:0 !important;
+    display:block !important;
+    height:auto !important;
+    min-height:0 !important;
+    overflow:visible !important;
+    box-shadow:none !important;
+  }
+  .certificate-container,
+  .cert-container,
+  .certificate-card,
+  .cert-card,
+  .print-card{
+    width:10.6in !important;
+    max-width:10.6in !important;
+    height:7.1in !important;
+    max-height:7.1in !important;
+    min-height:7.1in !important;
+    overflow:hidden !important;
+    margin:0 auto !important;
+    page-break-inside:avoid !important;
+    break-inside:avoid !important;
+    box-shadow:none !important;
+  }
+  .certificate-actions,
+  .cert-actions,
+  .download-row,
+  .print-buttons,
+  button,
+  .btn,
+  .next-stack-cta,
+  .complete-card{
+    display:none !important;
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -775,7 +823,7 @@ html,body{
       <div class="cert-score" id="certScore">—</div>
       <div class="cert-detail">
         People · Process · Business Environment<br>
-        www.thestackroom.com
+        www.pmpstudymethod.com
       </div>
       <div class="cert-badges">
         <span class="cert-badge">📚 ECO 2026</span>
@@ -788,7 +836,7 @@ html,body{
     </div>
 
     <button class="retake-btn" type="button" onclick="doRetake()">🔁 Retake Stack 1</button>
-    <div class="bfoot">Powered by <strong>PMP Study Method</strong> · The Stack Room · www.thestackroom.com</div>
+    <div class="bfoot">Powered by <strong>PMP Study Method</strong> · The Stack Room · www.pmpstudymethod.com</div>
   </div>
 
 </div>
@@ -1194,7 +1242,7 @@ function downloadCert(){
       '.csb{font-size:20px;}'+
     '}'+
     '@page{size:11in 8.5in;margin:0.35in;}'+
-    '@media print{'+
+    '@media print{@page{size:landscape;margin:0.2in;}html,body{height:auto !important;min-height:0 !important;overflow:visible !important;}*{-webkit-print-color-adjust:exact !important;print-color-adjust:exact !important;}@page{size:landscape;margin:0.2in;} html,body{height:auto !important;overflow:visible !important;} '+
       '.pbar{display:none!important;}'+
       '.cert-outer{padding:0;}'+
       'html,body{background:#fff;width:11in;height:8.5in;}'+
@@ -1267,7 +1315,7 @@ function downloadCert(){
         '</div>'+
         '<div class="cfoot">'+
           '<div class="cfoot-brand">Powered by <strong style="color:#F7941D;">PMP Study Method</strong> · The Stack Room</div>'+
-          '<div class="cfoot-url">www.thestackroom.com</div>'+
+          '<div class="cfoot-url">www.pmpstudymethod.com</div>'+
         '</div>'+
       '</div>'+
     '</div>'+
